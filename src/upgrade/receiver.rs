@@ -1,6 +1,3 @@
-use async_std::prelude::*;
-use async_std::sync;
-
 use std::future::Future;
 use std::pin::Pin;
 use std::task::{Context, Poll};
@@ -15,13 +12,13 @@ use crate::upgrade::Connection;
 #[must_use = "Futures do nothing unless polled or .awaited"]
 #[derive(Debug)]
 pub struct Receiver {
-    receiver: sync::Receiver<Connection>,
+    receiver: async_channel::Receiver<Connection>,
 }
 
 impl Receiver {
     /// Create a new instance of `Receiver`.
     #[allow(unused)]
-    pub(crate) fn new(receiver: sync::Receiver<Connection>) -> Self {
+    pub(crate) fn new(receiver: async_channel::Receiver<Connection>) -> Self {
         Self { receiver }
     }
 }

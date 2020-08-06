@@ -1,5 +1,3 @@
-use async_std::sync;
-
 use crate::upgrade::Connection;
 
 /// The sending half of a channel to send an upgraded connection.
@@ -9,13 +7,13 @@ use crate::upgrade::Connection;
 /// `Connection` should be created.
 #[derive(Debug)]
 pub struct Sender {
-    sender: sync::Sender<Connection>,
+    sender: async_channel::Sender<Connection>,
 }
 
 impl Sender {
     /// Create a new instance of `Sender`.
     #[doc(hidden)]
-    pub fn new(sender: sync::Sender<Connection>) -> Self {
+    pub fn new(sender: async_channel::Sender<Connection>) -> Self {
         Self { sender }
     }
 

@@ -1,11 +1,11 @@
-use async_std::io::{self, BufRead, Read};
-use async_std::sync;
-
 use std::convert::{Into, TryInto};
 use std::mem;
 use std::ops::Index;
 use std::pin::Pin;
 use std::task::{Context, Poll};
+
+use futures_lite::io::{self};
+use futures_lite::{AsyncBufRead as BufRead, AsyncRead as Read};
 
 use crate::convert::{DeserializeOwned, Serialize};
 use crate::headers::{
@@ -38,8 +38,8 @@ pin_project_lite::pin_project! {
         local_addr: Option<String>,
         peer_addr: Option<String>,
         ext: Extensions,
-        trailers_sender: Option<sync::Sender<Trailers>>,
-        trailers_receiver: Option<sync::Receiver<Trailers>>,
+        trailers_sender: Option<async_channel::Sender<Trailers>>,
+        trailers_receiver: Option<async_channel::Receiver<Trailers>>,
         has_trailers: bool,
     }
 }
@@ -52,7 +52,7 @@ impl Request {
         U::Error: std::fmt::Debug,
     {
         let url = url.try_into().expect("Could not convert into a valid url");
-        let (trailers_sender, trailers_receiver) = sync::channel(1);
+        let (trailers_sender, trailers_receiver) = async_channel::bounded(1);
         Self {
             method,
             url,

@@ -170,9 +170,6 @@ pub use crate::cookies::Cookie;
 pub mod security;
 pub mod trailers;
 
-#[cfg(feature = "hyperium_http")]
-mod hyperium_http;
-
 #[doc(inline)]
 pub use crate::extensions::Extensions;
 

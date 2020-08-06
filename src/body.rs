@@ -1,5 +1,5 @@
-use async_std::io::prelude::*;
-use async_std::io::{self, Cursor};
+use futures_lite::io::{self, *};
+use futures_lite::{AsyncBufRead as BufRead, AsyncRead as Read};
 use serde::{de::DeserializeOwned, Serialize};
 
 use std::fmt::{self, Debug};
